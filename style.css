@@ -1,0 +1,75 @@
+.bod {
+  min-height: 81vh;
+  box-sizing: border-box;
+}
+
+footer {
+  min-height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: grey;
+}
+
+footer > div > a > img {
+  padding-right: 1rem;
+  padding-left: 1rem;
+  height: 95%;
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+#send {
+  width: fit-content;
+  margin-top: 10px;
+  align-self: flex-end;
+}
+
+#message {
+  height: 10vh;
+}
+
+.category > form > fieldset {
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.carousel-inner {
+  height: 20vh;
+}
+
+.carousel-item {
+  height: 20vh;
+}
+
+.carta {
+  padding: 4rem 10rem 0;
+}
+
+.carta2 {
+  background-color: grey;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+table,
+td {
+  border: 1px solid;
+}
+td,
+th {
+  padding-left: 0.5rem;
+}
+td {
+  height: 30px;
+}
+
+th {
+  background-color: grey;
+}
