@@ -1,5 +1,5 @@
 .bod {
-  min-height: 81vh;
+  min-height: 78vh;
   box-sizing: border-box;
 }
 
@@ -9,6 +9,7 @@ footer {
   align-items: center;
   justify-content: space-between;
   background-color: grey;
+  padding-bottom: 1px;
 }
 
 footer > div > a > img {
