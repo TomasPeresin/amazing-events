@@ -3,7 +3,7 @@ console.log("Hello from home javascript");
 const $cards = document.getElementById("cards");
 
 function createCards(){
-    cardsBody = '';
+    let cardsBody = "";
     
     for (let event of data.events) {
         cardsBody +=
@@ -28,3 +28,6 @@ function createCards(){
 }
 
 $cards.innerHTML = createCards();
+
+const $categorys = document.getElementById("caregories")
+let categoriesBody = "";
