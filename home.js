@@ -1,5 +1,3 @@
-// console.log("Hello from home javascript");
-
 // Agarramos el contenedor donde van a ir las cartas
 const $cards = document.getElementById("cards");
 // Agarramos el contenedor donde van las categorias
