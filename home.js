@@ -97,7 +97,8 @@ function filtrarCategorias(){
         hayCartas(cartasFiltradas);
     }
     else {
-        imprimirEnHTML(data.events, $cards, crearCards);
+        cartas = filtrarPorTexto();
+        imprimirEnHTML(cartas, $cards, crearCards);
     }    
 }
 
