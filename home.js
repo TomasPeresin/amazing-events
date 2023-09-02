@@ -51,7 +51,7 @@ function crearParrafo(string){
 } 
 
 // agarramos las categorias posibles
-const arregloCategorias = [ ...new Set(data.events.map(objeto => objeto.category))]
+const $arregloCategorias = [ ...new Set(data.events.map(objeto => objeto.category))]
 
 // funcion reutilizable que agarra (un elemento iterable; donde se introduce; la funcion que inserta el texto)
 function imprimirEnHTML(arreglo, elementoHTML, funcionEstructura){
@@ -64,7 +64,7 @@ function imprimirEnHTML(arreglo, elementoHTML, funcionEstructura){
 
 // inyectamos en el html segun corresponda
 imprimirEnHTML(data.events, $cards, crearCards);
-imprimirEnHTML(arregloCategorias, $categories, crearCategories);
+imprimirEnHTML($arregloCategorias, $categories, crearCategories);
 
 // filtrar cartas segun los checks activos
 $botonSubmit.addEventListener("click", (event) =>{

@@ -1,3 +1,13 @@
+// Agarramos el contenedor donde van a ir las cartas
+const $cards = document.getElementById("cards");
+
+// Agarramos el contenedor donde van las categorias
+const $categories = document.getElementById("categories");
+
+// Agarramos el boton y el input del buscador
+const $botonSubmit = document.querySelector('button[type="submit"]');
+const $barraSearch = document.querySelector('input[type="search"]');
+
 function upcomingEvents(){
     let upcomingEventsArray = [];
     for (let event of data.events){
@@ -13,10 +23,7 @@ function upcomingEvents(){
 // mayor, lo metemos en los eventos por venir
 // para luego devolverlo.
 
-// Agarramos el contenedor donde van a ir las cartas
-const $cards = document.getElementById("cards");
-// Agarramos el contenedor donde van las categorias
-const $categories = document.getElementById("categories");
+const $cartasUpcomingEvents = upcomingEvents();
 
 // funcion para insertar el cuerpo de las cartas 
 function crearCards(card){
@@ -59,10 +66,8 @@ function crearParrafo(string){
     return template;
 } 
 
-const $cartasUpcoming = upcomingEvents();
-
 // agarramos las categorias posibles
-const $arregloCategorias = [ ...new Set($cartasUpcoming.map(objeto => objeto.category))]
+const $arregloCategorias = [ ...new Set($cartasUpcomingEvents.map(objeto => objeto.category))]
 
 // funcion reutilizable que agarra (un elemento iterable; donde se introduce; la funcion que inserta el texto)
 function imprimirEnHTML(arreglo, elementoHTML, funcionEstructura){
@@ -74,22 +79,46 @@ function imprimirEnHTML(arreglo, elementoHTML, funcionEstructura){
 }
 
 // inyectamos en el html segun corresponda
-imprimirEnHTML($cartasUpcoming, $cards, crearCards);
+imprimirEnHTML($cartasUpcomingEvents, $cards, crearCards);
 imprimirEnHTML($arregloCategorias, $categories, crearCategories);
 
 // filtrar cartas segun los checks activos
-$categories.addEventListener("change", (event) =>{
+$botonSubmit.addEventListener("click", (event) =>{
+    event.preventDefault();
+    let cartasFiltradas = filtrarPorTexto();
+    hayCartas(cartasFiltradas);
+});
+
+function filtrarPorTexto(){
+    let textoBuscado = $barraSearch.value;
+    let cartasFiltradas = [];
+        $cartasUpcomingEvents.forEach( e =>{
+            if (e.name.includes(textoBuscado)){
+                cartasFiltradas.push(e);
+            }
+        })
+    return cartasFiltradas;
+}
+
+// filtrar cartas segun los checks activos
+$categories.addEventListener("change", (e) =>{filtrarCategorias()});
+
+function filtrarCategorias(){
     let nodeList = document.querySelectorAll("input[type='checkbox']:checked");
     let arregloValores = Array.from(nodeList).map(check=>check.value)
+    // verificamos que este marcada alguna categoria (al poner y sacar no mostraba cartas)
     if (arregloValores.length > 0){
-        let cartasFiltradas = $cartasUpcoming.filter(objeto => arregloValores.includes(objeto.category));
+        cartas = filtrarPorTexto();
+        let cartasFiltradas = cartas.filter(objeto => arregloValores.includes(objeto.category));
         hayCartas(cartasFiltradas);
     }
     else {
-        imprimirEnHTML($cartasUpcoming, $cards, crearCards);
-    }
-});
+        cartas = filtrarPorTexto();
+        imprimirEnHTML(cartas, $cards, crearCards);
+    }    
+}
 
+// verificamos que existan cartas con los filtros dados
 function hayCartas(objetos){
     if (objetos.length > 0){
         imprimirEnHTML(objetos, $cards, crearCards);
