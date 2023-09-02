@@ -1,7 +1,12 @@
 // Agarramos el contenedor donde van a ir las cartas
 const $cards = document.getElementById("cards");
+
 // Agarramos el contenedor donde van las categorias
 const $categories = document.getElementById("categories");
+
+// Agarramos el boton y el input del buscador
+const $botonSubmit = document.querySelector('button[type="submit"]');
+const $barraSearch = document.querySelector('input[type="search"]');
 
 // funcion para insertar el cuerpo de las cartas 
 function crearCards(card){
@@ -35,6 +40,7 @@ function crearCategories(string){
     `;
     return template;
 }
+
 // funcion para insertar parrafos
 function crearParrafo(string){
     let template = "";
@@ -61,18 +67,41 @@ imprimirEnHTML(data.events, $cards, crearCards);
 imprimirEnHTML(arregloCategorias, $categories, crearCategories);
 
 // filtrar cartas segun los checks activos
-$categories.addEventListener("change", (event) =>{
+$botonSubmit.addEventListener("click", (event) =>{
+    event.preventDefault();
+    let cartasFiltradas = filtrarPorTexto();
+    hayCartas(cartasFiltradas);
+});
+
+function filtrarPorTexto(){
+    let textoBuscado = document.querySelector("input[type='search']").value;
+    let cartasFiltradas = [];
+        data.events.forEach( e =>{
+            if (e.name.includes(textoBuscado)){
+                cartasFiltradas.push(e);
+            }
+        })
+    return cartasFiltradas;
+}
+
+// filtrar cartas segun los checks activos
+$categories.addEventListener("change", (e) =>{filtrarCategorias()});
+
+function filtrarCategorias(){
     let nodeList = document.querySelectorAll("input[type='checkbox']:checked");
     let arregloValores = Array.from(nodeList).map(check=>check.value)
+    // verificamos que este marcada alguna categoria (al poner y sacar no mostraba cartas)
     if (arregloValores.length > 0){
-        let cartasFiltradas = data.events.filter(objeto => arregloValores.includes(objeto.category));
+        cartas = filtrarPorTexto();
+        let cartasFiltradas = cartas.filter(objeto => arregloValores.includes(objeto.category));
         hayCartas(cartasFiltradas);
     }
     else {
         imprimirEnHTML(data.events, $cards, crearCards);
-    }
-});
+    }    
+}
 
+// verificamos que existan cartas con los filtros dados
 function hayCartas(objetos){
     if (objetos.length > 0){
         imprimirEnHTML(objetos, $cards, crearCards);
