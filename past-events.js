@@ -1,3 +1,8 @@
+// Recorro cada elemento del array para luego
+// comparar la fecha de este elemento con la
+// fecha actual. Si la fecha del elemento es
+// menor o igual, lo metemos en los eventos
+// pasados para luego devolverlo.
 function pastEvents(){
     let pastEventsArray = [];
     for (let event of data.events){
@@ -7,11 +12,6 @@ function pastEvents(){
     }
     return pastEventsArray;
 }
-// Recorro cada elemento del array para luego
-// comparar la fecha de este elemento con la
-// fecha actual. Si la fecha del elemento es
-// menor o igual, lo metemos en los eventos
-// pasados para luego devolverlo.
 
 const $cartasPastEvents = pastEvents();
 
