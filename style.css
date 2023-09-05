@@ -51,7 +51,7 @@ fieldset {
   padding: 4rem 10rem 0;
 }
 
-.carta2 {
+#carta2 {
   background-color: grey;
   display: flex;
   flex-wrap: wrap;
@@ -76,22 +76,25 @@ th {
 }
 
 .card:hover{
-  transition: all 0.5s;
-  transform: scale(1.15);
+  transition: all 0.3s;
+  transform: scale(1.05, 0.95);
   margin: 1rem 0;
-  -webkit-transform: scale(1.15);
-  -moz-transform: scale(1.15);
-  -ms-transform: scale(1.15);
-  -o-transform: scale(1.15);
+  -webkit-transform: scale(1.05, 0.95);
+  -moz-transform: scale(1.05, 0.95);
+  -ms-transform: scale(1.05, 0.95);
+  -o-transform: scale(1.05, 0.95);
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
 }
 
 @media only screen and (max-width:480px){
   .card:hover{
-    transition: all 0.5s;
-    transform: scale(1.05);
-    -webkit-transform: scale(1.05);
-    -moz-transform: scale(1.05);
-    -ms-transform: scale(1.05);
-    -o-transform: scale(1.05);
+    transform: scale(1.03, 0.95);
+    -webkit-transform: scale(1.03, 0.95);
+    -moz-transform: scale(1.03, 0.95);
+    -ms-transform: scale(1.03, 0.95);
+    -o-transform: scale(1.03, 0.95);
 }
 }

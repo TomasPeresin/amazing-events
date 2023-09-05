@@ -21,7 +21,7 @@ function crearCards(card){
                 </p>
                 <div class="d-flex justify-content-between align-content-end flex-wrap">
                     <p>Price: $${card.price}</p>
-                    <a href="details.html" class="btn btn-primary">Details</a>
+                    <a href="details.html?id=${card._id}" class="btn btn-primary">Details</a>
                 </div>
             </div>
         </div>
