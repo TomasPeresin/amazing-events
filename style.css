@@ -75,18 +75,31 @@ th {
   background-color: grey;
 }
 
+.card{
+  border-radius: 17px;
+  background: #ffffff;
+  box-shadow:  21px 21px 42px #cccccc,
+               -21px -21px 42px #ffffff;
+}
+
 .card:hover{
-  transition: all 0.3s;
-  transform: scale(1.05, 0.95);
+/* muy mal ux que al hacer esto se mueva el boton, pero queda lindo https://media.tenor.com/JWOqX2E7rFoAAAAi/sadpepe-sad.gif */
+  transition: all 0.5s;
+  transform: scale(1.2);
   margin: 1rem 0;
-  -webkit-transform: scale(1.05, 0.95);
-  -moz-transform: scale(1.05, 0.95);
-  -ms-transform: scale(1.05, 0.95);
-  -o-transform: scale(1.05, 0.95);
-  -webkit-transition: all 0.3s;
-  -moz-transition: all 0.3s;
-  -ms-transition: all 0.3s;
-  -o-transition: all 0.3s;
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -o-transition: all 0.5s;
+}
+
+div>label:hover{
+  text-decoration-line: underline overline;
+  -moz-text-decoration-line: underline overline;
 }
 
 @media only screen and (max-width:480px){
@@ -96,5 +109,5 @@ th {
     -moz-transform: scale(1.03, 0.95);
     -ms-transform: scale(1.03, 0.95);
     -o-transform: scale(1.03, 0.95);
-}
+  }
 }

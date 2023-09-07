@@ -12,7 +12,7 @@ const $barraSearch = document.querySelector('input[type="search"]');
 function crearCards(card){
     let template ="";
     template = `
-        <div class="card mb-4 shadow bg-white rounded" style="width: 18rem">
+        <div class="card mb-4 rounded" style="width: 18rem">
             <img src=${card.image} class="card-img-top" alt="${card.image}" style="height: 190px;"/>
             <div class="card-body">
                 <h5 class="card-title">${card.name}</h5>
