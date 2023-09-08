@@ -4,7 +4,7 @@ const $params = new URLSearchParams($queryString);
 
 const $id = $params.get("id");
 
-const $evento = data.events.find(evento => evento._id === $id);
+// const $evento = data.events.find(evento => evento._id === $id);
 
 const $detailBody = document.getElementById("carta2");
 
@@ -24,4 +24,22 @@ function crearCartaDetalles(evento){
     return template;
 }
 
-imprimirEnHTML([$evento], $detailBody, crearCartaDetalles);
+// imprimirEnHTML([$evento], $detailBody, crearCartaDetalles);
+
+let urlApi = "https://mindhub-xj03.onrender.com/api/amazing"
+
+async function recuperarData(){
+    try{
+        const response = await fetch(urlApi);
+        const datos = await response.json();
+
+        let evento = datos.events.find(evento => evento._id == $id);
+
+        imprimirEnHTML([evento], $detailBody, crearCartaDetalles);
+    }
+    catch(error){
+        console.log(error);
+    }
+}
+
+recuperarData();
