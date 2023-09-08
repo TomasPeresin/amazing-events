@@ -1,16 +1,30 @@
-// agarramos las categorias posibles
-const $arregloCategorias = categoriasDisponibles(data.events);
+let urlApi = "https://mindhub-xj03.onrender.com/api/amazing"
 
-// inyectamos en el html segun corresponda
-imprimirEnHTML(data.events, $cards, crearCards);
-imprimirEnHTML($arregloCategorias, $categories, crearCategories);
+async function recuperarData(){
+    try{
+        const response = await fetch(urlApi);
+        const datos = await response.json();
+        
+        // agarramos las categorias posibles
+        const $arregloCategorias = categoriasDisponibles(datos.events);
 
-// filtrar cartas segun los checks activos
-$botonSubmit.addEventListener("click", (event) =>{
-    event.preventDefault();
-    let cartasFiltradas = filtrarPorTexto(data.events);
-    hayCartas(cartasFiltradas);
-});
+        // inyectamos en el html segun corresponda
+        imprimirEnHTML(datos.events, $cards, crearCards);
+        imprimirEnHTML($arregloCategorias, $categories, crearCategories);
 
-// filtrar cartas segun los checks activos
-$categories.addEventListener("change", (e) =>{filtrarCategorias(data.events)});
+        // filtrar cartas segun los checks activos
+        $botonSubmit.addEventListener("click", (event) =>{
+            event.preventDefault();
+            let cartasFiltradas = filtrarPorTexto(datos.events);
+            hayCartas(cartasFiltradas);
+        });
+
+        // filtrar cartas segun los checks activos
+        $categories.addEventListener("change", (e) =>{filtrarCategorias(datos.events)});
+    }
+    catch(error){
+        console.log(error);
+    }
+}
+
+recuperarData();
