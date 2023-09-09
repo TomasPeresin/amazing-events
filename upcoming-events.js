@@ -5,21 +5,6 @@ async function recuperarData(){
         const response = await fetch(urlApi);
         const datos = await response.json();
         
-        // Recorro cada elemento del array para luego
-        // comparar la fecha de este elemento con la
-        // fecha actual. Si la fecha del elemento es
-        // mayor, lo metemos en los eventos por venir
-        // para luego devolverlo.
-        function upcomingEvents(objeto){
-            let upcomingEventsArray = [];
-            for (let event of objeto.events){
-                if (event.date > objeto.currentDate){
-                    upcomingEventsArray.push(event);
-                }
-            }
-            return upcomingEventsArray;
-        }
-
         const $cartasUpcomingEvents = upcomingEvents(datos);
 
         // agarramos las categorias posibles
@@ -46,10 +31,20 @@ async function recuperarData(){
 
 recuperarData();
 
-
-
-
-
+// Recorro cada elemento del array para luego
+// comparar la fecha de este elemento con la
+// fecha actual. Si la fecha del elemento es
+// mayor, lo metemos en los eventos por venir
+// para luego devolverlo.
+function upcomingEvents(objeto){
+    let upcomingEventsArray = [];
+    for (let event of objeto.events){
+        if (event.date > objeto.currentDate){
+            upcomingEventsArray.push(event);
+        }
+    }
+    return upcomingEventsArray;
+}
 
 
 

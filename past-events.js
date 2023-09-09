@@ -7,16 +7,6 @@ fetch(urlApi)
   .then((data) => {
     let datos = data;
 
-    function pastEvents(objeto) {
-      let pastEventsArray = [];
-      for (let event of objeto.events) {
-        if (event.date <= objeto.currentDate) {
-          pastEventsArray.push(event);
-        }
-      }
-      return pastEventsArray;
-    }
-
     const $datosPastEvents = pastEvents(datos);
 
     // agarramos las categorias posibles
@@ -39,6 +29,18 @@ fetch(urlApi)
     });
   })
   .catch((error) => console.log(error));
+
+
+function pastEvents(objeto) {
+  let pastEventsArray = [];
+  for (let event of objeto.events) {
+    if (event.date <= objeto.currentDate) {
+      pastEventsArray.push(event);
+    }
+  }
+  return pastEventsArray;
+}
+
 
 
   
