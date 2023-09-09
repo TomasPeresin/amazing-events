@@ -7,38 +7,109 @@ let urlApi = "https://mindhub-xj03.onrender.com/api/amazing";
 fetch(urlApi).then( (response) => response.json())
 .then( (data) => {
     datos = data;
-
-    // console.log(datos.events);
-
-    EventsStatics(datos);
-    // EventsStatics(datos);
-
-    // imprimirEnHTML(pastCategorias, pastEvents, $pastEventsTable, crearTabla);
-    // imprimirEnHTML(upcomingCategorias, upcomingEvents, $upcomingEventsTable, crearTabla);
-
-}) 
-.catch( (error) => console.log(error));
-
-function EventsStatics(datos){
-    // let losTresDatosNecesarios = []; // La idea es que quede [(mayor asistencia), (menor asistencia), (mayor capacidad)]
     
-    // let pastEvents = pastEventsFilter(datos); // Usamos los past events para las dos primeras estadisticas
-    
+    console.log(datos.events);
+
     datos.events.forEach( (event) => {
         event.percent = AgregarPorcentaje(event);
     })
 
     datos.events.sort((a, b) => a.percent - b.percent)
 
+    EventsStatics(datos);
+
     let pastEvents = pastEventsFilter(datos);
+    let upcomingEvents = upcomingEventsFilter(datos);
 
-    imprimirEventsStatics(datos.events, pastEvents, $eventsStatics);
+    UpcomingStatics(upcomingEvents);
+    
+}) 
+.catch( (error) => console.log(error));
+
+function UpcomingStatics(events){
+    let categorias = categoriasDisponibles(events);
+    console.log(categorias);
+    console.log(events);
+    categorias.forEach( (categoria) => {
+        let eventos = events;
+        let eventosFiltrados = eventos.filter( (event) => categoria.includes(event.category))
+        UpcomingImprimir(eventosFiltrados, $upcomingEventsTable);
+    })
+}
+
+function UpcomingImprimir(eventos, elementoHTML){
+    let estructura = "";
+
+    let revenues = Revenues(eventos);
+    let asistencia = Assistance(eventos);
+    let categoria = eventos[0].category;
+
+    estructura += `
+    <tr>
+        <td>${categoria}</td>
+        <td>$${revenues}</td>
+        <td>${asistencia}</td>
+    </tr>
+    `;
+    elementoHTML.innerHTML += estructura;
+}
+
+
+function Revenues(eventos){
+    let ganancias = 0;
+    eventos.forEach( evento => ganancias += evento.price * evento.estimate);
+    return ganancias;
+}
+
+function Assistance(eventos){
+    let asistencia = 0;
+    // revisar calculo
+    eventos.forEach( evento => asistencia += evento.percent);
+    asistencia = asistencia/eventos.length;
+    return asistencia;
+}
 
 
 
-    // losTresDatosNecesarios.push(HighestAssistance(pastEvents)); // inserto en el arreglo de 3 datos el evento con mayor porcentaje de asistencia
-    // losTresDatosNecesarios.push(LowestAssistance(pastEvents)); // inserto en el arreglo el porcentaje menor de asistencia
-    // losTresDatosNecesarios.push(Large)
+
+
+
+
+function categoriasDisponibles(arreglo){
+    return [...new Set(arreglo.map(objeto => objeto.category))]
+}
+
+// funcion para insertar el cuerpo de las cartas 
+function crearTabla(category, events){
+    let template ="";
+    template = `
+            <tr>
+                <td>${category}</td>
+                <td>$${revenues(category, events)}</td>
+                <td>${assistance(category, events)}</td>
+            </tr>
+        `;
+    return template
+}
+
+function pastEventsFilter(objeto) {
+    let pastEventsArray = [];
+    for (let event of objeto.events) {
+      if (event.date <= objeto.currentDate) {
+        pastEventsArray.push(event);
+      }
+    }
+    return pastEventsArray;
+}
+
+function upcomingEventsFilter(objeto){
+    let upcomingEventsArray = [];
+    for (let event of objeto.events){
+        if (event.date > objeto.currentDate){
+            upcomingEventsArray.push(event);
+        }
+    }
+    return upcomingEventsArray;
 }
 
 function AgregarPorcentaje(evento) {
@@ -69,90 +140,8 @@ function imprimirEventsStatics(datos, pastEvents, elementoHTML){
     elementoHTML.innerHTML += estructura;
 }
 
+function EventsStatics(datos){
+    let pastEvents = pastEventsFilter(datos);
 
-// function HighestAssistance(eventos){
-//     let highest = 0; //evento con mas asistencia
-//     eventos.forEach( (event) => {
-//         let porcentaje = CalcularAsistencia(event);
-//         if (highest < porcentaje){
-//             highest = porcentaje;
-//         }
-//     })
-//     return highest;
-// }
-
-// function LowestAssistance(eventos){
-//     let lowest = 0; //evento con mas asistencia
-//     eventos.forEach( (event) => {
-//         let porcentaje = CalcularAsistencia(event);
-//         if (lowest >= porcentaje){
-//             lowest = porcentaje;
-//         }
-//     })
-//     return lowest;
-// }
-
-// function CalcularAsistencia(evento) { //en porcentaje
-//     let porcentaje = evento.assistance*100/evento.capacity;
-//     console.log(porcentaje);
-//     return porcentaje;
-// }
-
-// function imprimirEnHTML(categorias, eventos, elementoHTML, funcionEstructura){
-//     let estructura = elementoHTML.innerHtml;
-//     categorias.forEach ( object => {
-//         estructura += funcionEstructura(object, eventos)
-//     });
-//     elementoHTML.innerHTML += estructura;
-// }
-
-function categoriasDisponibles(arreglo){
-    return [...new Set(arreglo.map(objeto => objeto.category))]
-}
-
-// // funcion para insertar el cuerpo de las cartas 
-// function crearTabla(category, events){
-//     let template ="";
-//     template = `
-//             <tr>
-//                 <td>${category}</td>
-//                 <td>$${revenues(category, events)}</td>
-//                 <td>${assistance(category, events)}</td>
-//             </tr>
-//         `;
-//     return template
-// }
-
-// function revenues(category, events){
-//     let eventsOfCategory = events.filter(objeto => category.includes(objeto.category));
-//     let ganancias = 0;
-//     eventsOfCategory.forEach( evento => ganancias += evento.price * evento.assistance);
-//     return ganancias;
-// }
-
-// function assistance(category, events){
-//     let eventsOfCategory = events.filter(objeto => category.includes(objeto.category));
-//         let asistencia = 0;
-//         eventsOfCategory.forEach( evento => asistencia += evento.assistance);
-//         return asistencia;
-// }
-
-function pastEventsFilter(objeto) {
-    let pastEventsArray = [];
-    for (let event of objeto.events) {
-      if (event.date <= objeto.currentDate) {
-        pastEventsArray.push(event);
-      }
-    }
-    return pastEventsArray;
-}
-
-function upcomingEventsFilter(objeto){
-    let upcomingEventsArray = [];
-    for (let event of objeto.events){
-        if (event.date > objeto.currentDate){
-            upcomingEventsArray.push(event);
-        }
-    }
-    return upcomingEventsArray;
+    imprimirEventsStatics(datos.events, pastEvents, $eventsStatics);
 }
