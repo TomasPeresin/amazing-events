@@ -22,19 +22,29 @@ fetch(urlApi).then( (response) => response.json())
     let upcomingEvents = upcomingEventsFilter(datos);
 
     UpcomingStatics(upcomingEvents);
+    PastStatics(pastEvents);
     
 }) 
 .catch( (error) => console.log(error));
 
 function UpcomingStatics(events){
     let categorias = categoriasDisponibles(events);
-    console.log(categorias);
-    console.log(events);
     categorias.forEach( (categoria) => {
         let eventos = events;
         let eventosFiltrados = eventos.filter( (event) => categoria.includes(event.category))
         UpcomingImprimir(eventosFiltrados, $upcomingEventsTable);
     })
+}
+
+function PastStatics(events){
+    let categorias = categoriasDisponibles(events);
+    console.log(categorias);
+    console.log(events);
+    categorias.forEach( (categoria) => {
+        let eventos = events;
+        let eventosFiltrados = eventos.filter( (event) => categoria.includes(event.category))
+        UpcomingImprimir(eventosFiltrados, $pastEventsTable);
+    })    
 }
 
 function UpcomingImprimir(eventos, elementoHTML){
@@ -47,33 +57,37 @@ function UpcomingImprimir(eventos, elementoHTML){
     estructura += `
     <tr>
         <td>${categoria}</td>
-        <td>$${revenues}</td>
-        <td>${asistencia}</td>
+        <td>${revenues}</td>
+        <td>${asistencia}%</td>
     </tr>
     `;
     elementoHTML.innerHTML += estructura;
 }
 
-
 function Revenues(eventos){
     let ganancias = 0;
-    eventos.forEach( evento => ganancias += evento.price * evento.estimate);
-    return ganancias;
+    if (Object.keys(eventos[0]).includes("estimate")){
+        eventos.forEach( evento => ganancias += evento.price * evento.estimate);
+    }
+    else{
+        eventos.forEach( evento => ganancias += evento.price * evento.assistance);
+    }
+
+    let formato = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+    }).format(ganancias);
+    return formato;
 }
 
 function Assistance(eventos){
     let asistencia = 0;
-    // revisar calculo
     eventos.forEach( evento => asistencia += evento.percent);
     asistencia = asistencia/eventos.length;
-    return asistencia;
+
+    let formato = asistencia.toFixed(2);
+    return formato;
 }
-
-
-
-
-
-
 
 function categoriasDisponibles(arreglo){
     return [...new Set(arreglo.map(objeto => objeto.category))]
@@ -142,6 +156,5 @@ function imprimirEventsStatics(datos, pastEvents, elementoHTML){
 
 function EventsStatics(datos){
     let pastEvents = pastEventsFilter(datos);
-
     imprimirEventsStatics(datos.events, pastEvents, $eventsStatics);
 }
