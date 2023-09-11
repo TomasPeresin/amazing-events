@@ -7,8 +7,6 @@ let urlApi = "https://mindhub-xj03.onrender.com/api/amazing";
 fetch(urlApi).then( (response) => response.json())
 .then( (data) => {
     datos = data;
-    
-    console.log(datos.events);
 
     datos.events.forEach( (event) => {
         event.percent = AgregarPorcentaje(event);
@@ -32,22 +30,20 @@ function UpcomingStatics(events){
     categorias.forEach( (categoria) => {
         let eventos = events;
         let eventosFiltrados = eventos.filter( (event) => categoria.includes(event.category))
-        UpcomingImprimir(eventosFiltrados, $upcomingEventsTable);
+        StatisticsImprimir(eventosFiltrados, $upcomingEventsTable);
     })
 }
 
 function PastStatics(events){
     let categorias = categoriasDisponibles(events);
-    console.log(categorias);
-    console.log(events);
     categorias.forEach( (categoria) => {
         let eventos = events;
         let eventosFiltrados = eventos.filter( (event) => categoria.includes(event.category))
-        UpcomingImprimir(eventosFiltrados, $pastEventsTable);
+        StatisticsImprimir(eventosFiltrados, $pastEventsTable);
     })    
 }
 
-function UpcomingImprimir(eventos, elementoHTML){
+function StatisticsImprimir(eventos, elementoHTML){
     let estructura = "";
 
     let revenues = Revenues(eventos);
@@ -137,8 +133,6 @@ function AgregarPorcentaje(evento) {
 
 function imprimirEventsStatics(datos, pastEvents, elementoHTML){
     let estructura = "";
-
-    console.log(elementoHTML)
 
     let mayor = pastEvents[pastEvents.length - 1];
     let menor = pastEvents[0];
