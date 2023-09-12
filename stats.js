@@ -26,35 +26,43 @@ fetch(urlApi).then( (response) => response.json())
 .catch( (error) => console.log(error));
 
 function UpcomingStatics(events){
-    let categorias = categoriasDisponibles(events);
-    categorias.forEach( (categoria) => {
-        let eventos = events;
-        let eventosFiltrados = eventos.filter( (event) => categoria.includes(event.category))
-        StatisticsImprimir(eventosFiltrados, $upcomingEventsTable);
-    })
+    let eventosFiltrados = FiltradoPorCategoria(events);
+    eventosFiltrados.sort((a, b) => b.asistencia - a.asistencia)
+    eventosFiltrados.forEach( fila => StatisticsImprimir(fila, $upcomingEventsTable));
 }
 
 function PastStatics(events){
-    let categorias = categoriasDisponibles(events);
-    categorias.forEach( (categoria) => {
-        let eventos = events;
-        let eventosFiltrados = eventos.filter( (event) => categoria.includes(event.category))
-        StatisticsImprimir(eventosFiltrados, $pastEventsTable);
-    })    
+    let eventosFiltrados = FiltradoPorCategoria(events);
+    eventosFiltrados.sort((a, b) => b.asistencia - a.asistencia)
+    eventosFiltrados.forEach( fila => StatisticsImprimir(fila, $pastEventsTable));
 }
 
-function StatisticsImprimir(eventos, elementoHTML){
-    let estructura = "";
+function FiltradoPorCategoria(events){
+    let cateDisponibles = categoriasDisponibles(events);
+    let categoriasObjeto = [];
+    cateDisponibles.forEach( 
+        categoria => categoriasObjeto.push(creacionObjetoCategoria(events, categoria))
+        );
+    return categoriasObjeto;
+}
 
-    let revenues = Revenues(eventos);
-    let asistencia = Assistance(eventos);
-    let categoria = eventos[0].category;
+function creacionObjetoCategoria(events, c){
+    eventosFiltrados = events.filter( (event) => c.includes(event.category))
+    let cate = c;
+    let revenue = Revenues(eventosFiltrados);
+    let asistencia = Assistance(eventosFiltrados);
+
+    return {categoria : cate, revenue: revenue, asistencia: asistencia};
+}
+
+function StatisticsImprimir(fila, elementoHTML){
+    let estructura = "";
 
     estructura += `
     <tr>
-        <td>${categoria}</td>
-        <td>${revenues}</td>
-        <td>${asistencia}%</td>
+        <td>${fila.categoria}</td>
+        <td>${fila.revenue}</td>
+        <td>${fila.asistencia}%</td>
     </tr>
     `;
     elementoHTML.innerHTML += estructura;
@@ -141,7 +149,7 @@ function imprimirEventsStatics(datos, pastEvents, elementoHTML){
 
     let capacidad = datos[0];
 
-    estructura += `<td>${mayor.name} ${mayor.percent}%</td>`;
+    estructura += `<td>${mayor.name} ${mayor.percent.toFixed(2)}%</td>`;
     estructura += `<td>${menor.name} ${menor.percent}%</td>`;
     estructura += `<td>${capacidad.name} ${capacidad.capacity}</td>`;
 

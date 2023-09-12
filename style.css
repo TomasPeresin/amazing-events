@@ -59,12 +59,10 @@ fieldset {
   align-items: center;
 }
 
-table,
-td {
+/* table,td {
   border: 1px solid;
-}
-td,
-th {
+} */
+/* td,th {
   padding-left: 0.5rem;
 }
 td {
@@ -73,6 +71,10 @@ td {
 
 th {
   background-color: grey;
+} */
+
+.table td{
+  text-align:center;
 }
 
 .card{
