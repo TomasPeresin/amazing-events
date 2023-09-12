@@ -11,8 +11,8 @@ const $detailBody = document.getElementById("carta2");
 function crearCartaDetalles(evento){
     let template = "";
     template = `
-        <img src="${evento.image}" class="col-lg-5 col-12 p-3" alt="${evento.name} image" />
-        <div class="col-lg-5 col-12 d-flex flex-wrap flex-column text-center justify-content-center bg-white me-4">
+        <img src="${evento.image}" class="col-md-5 col-12 p-3" alt="${evento.name} image" />
+        <div class="col-md-5 col-12 d-flex flex-wrap flex-column text-center justify-content-center bg-white me-4 my-3 p-md-0 px-2">
             <h3>${evento.name}</h3>
             <p><b>Date:</b> ${evento.date}</p>
             <p><b>description:</b> ${evento.description}</p>

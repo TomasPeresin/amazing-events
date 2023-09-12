@@ -48,7 +48,7 @@ fieldset {
 }
 
 .carta {
-  padding: 4rem 10rem 0;
+  padding: 3rem 3rem 0;
 }
 
 #carta2 {
@@ -104,6 +104,13 @@ div>label:hover{
   -moz-text-decoration-line: underline overline;
 }
 
+@media only screen and (max-width:768px){
+  .carta {
+    padding: 1rem 3rem 0;
+  }
+
+}
+
 @media only screen and (max-width:480px){
   .card:hover{
     transform: scale(1.03, 0.95);
@@ -113,7 +120,11 @@ div>label:hover{
     -o-transform: scale(1.03, 0.95);
   }
 
+}
+
+@media only screen and (max-width:320px){
   .carta {
-    padding: 1rem 3rem 0;
+    padding: 0.5rem 0.5rem 0;
   }
+
 }
