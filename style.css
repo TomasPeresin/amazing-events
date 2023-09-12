@@ -56,7 +56,7 @@ fieldset {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
 }
 
 /* table,td {
@@ -111,5 +111,9 @@ div>label:hover{
     -moz-transform: scale(1.03, 0.95);
     -ms-transform: scale(1.03, 0.95);
     -o-transform: scale(1.03, 0.95);
+  }
+
+  .carta {
+    padding: 1rem 3rem 0;
   }
 }
