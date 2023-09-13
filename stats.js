@@ -8,26 +8,33 @@ fetch(urlApi).then( (response) => response.json())
 .then( (data) => {
     datos = data;
 
+    // Agregamos los porcentajes al objeto data.events por cada evento
     datos.events.forEach( (event) => {
         event.percent = AgregarPorcentaje(event);
     })
 
+    // Ordenamos segun el porcentaje de asistencia (menor a mayor)
     datos.events.sort((a, b) => a.percent - b.percent)
 
+    // Imprimimos los datos de la primer tabla
     EventsStatics(datos);
 
+    // Filtramos segun los eventos que ya sucedieron y los que vienen
     let pastEvents = pastEventsFilter(datos);
     let upcomingEvents = upcomingEventsFilter(datos);
 
-    UpcomingStatics(upcomingEvents);
+    // Imprimimos las dos tablas que faltan
     PastStatics(pastEvents);
-    
+    UpcomingStatics(upcomingEvents);
 }) 
 .catch( (error) => console.log(error));
 
 function UpcomingStatics(events){
+    // Agarramos un array que contiene objetos con las categorias y los datos necesarios (category, revenue, assistance)
     let eventosFiltrados = FiltradoPorCategoria(events);
+    // Lo ordenamos de mayor a menor asistencia
     eventosFiltrados.sort((a, b) => b.asistencia - a.asistencia)
+    // Lo imprimimos en su tabla correspondiente
     eventosFiltrados.forEach( fila => StatisticsImprimir(fila, $upcomingEventsTable));
 }
 
@@ -38,21 +45,28 @@ function PastStatics(events){
 }
 
 function FiltradoPorCategoria(events){
+    // Agarro las categorias posibles de los eventos que tengo disponibles
     let cateDisponibles = categoriasDisponibles(events);
     let categoriasObjeto = [];
+    // Por cada categoria obtenemos un objeto con los datos que necesitamos (category, revenue, assistance)
+    // y lo metemos en el array
     cateDisponibles.forEach( 
         categoria => categoriasObjeto.push(creacionObjetoCategoria(events, categoria))
         );
     return categoriasObjeto;
 }
 
-function creacionObjetoCategoria(events, c){
-    eventosFiltrados = events.filter( (event) => c.includes(event.category))
-    let cate = c;
+// recibo eventos a filtrar y una categoria
+function creacionObjetoCategoria(events, categ){
+    // Agarro los eventos que tengan la categoria solicitada
+    eventosFiltrados = events.filter( (event) => categ.includes(event.category));
+    // Obtenemos las ganancias de los eventos obtenidos
     let revenue = Revenues(eventosFiltrados);
+    // Obtenemos el porcentaje de asistencia de los eventos obtenidos
     let asistencia = Assistance(eventosFiltrados);
 
-    return {categoria : cate, revenue: revenue, asistencia: asistencia};
+    // Devolvemos un objeto que contiene la categoria, las ganancias y el porcentaje de asistencia
+    return {categoria : categ, revenue: revenue, asistencia: asistencia};
 }
 
 function StatisticsImprimir(fila, elementoHTML){
@@ -70,6 +84,7 @@ function StatisticsImprimir(fila, elementoHTML){
 
 function Revenues(eventos){
     let ganancias = 0;
+    // Filtramos según sean past o upcoming envents
     if (Object.keys(eventos[0]).includes("estimate")){
         eventos.forEach( evento => ganancias += evento.price * evento.estimate);
     }
@@ -77,6 +92,7 @@ function Revenues(eventos){
         eventos.forEach( evento => ganancias += evento.price * evento.assistance);
     }
 
+    // Le damos formato a lo recaudado
     let formato = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD'
@@ -89,25 +105,13 @@ function Assistance(eventos){
     eventos.forEach( evento => asistencia += evento.percent);
     asistencia = asistencia/eventos.length;
 
+    // Redondemaos el porcentaje en 2 decimales
     let formato = asistencia.toFixed(2);
     return formato;
 }
 
 function categoriasDisponibles(arreglo){
     return [...new Set(arreglo.map(objeto => objeto.category))]
-}
-
-// funcion para insertar el cuerpo de las cartas 
-function crearTabla(category, events){
-    let template ="";
-    template = `
-            <tr>
-                <td>${category}</td>
-                <td>$${revenues(category, events)}</td>
-                <td>${assistance(category, events)}</td>
-            </tr>
-        `;
-    return template
 }
 
 function pastEventsFilter(objeto) {
@@ -130,7 +134,9 @@ function upcomingEventsFilter(objeto){
     return upcomingEventsArray;
 }
 
+// Agregar porcentaje a los objetos dados
 function AgregarPorcentaje(evento) {
+    // Primero reviso si es un past event o un upcoming event segun tenga asistencia o un estimado
     if (Object.keys(evento).includes("assistance")){
         return evento.assistance*100/evento.capacity;
     }
@@ -139,24 +145,27 @@ function AgregarPorcentaje(evento) {
     }
 }
 
-function imprimirEventsStatics(datos, pastEvents, elementoHTML){
-    let estructura = "";
-
-    let mayor = pastEvents[pastEvents.length - 1];
-    let menor = pastEvents[0];
-
-    datos.sort((a, b) => b.capacity - a.capacity)
-
-    let capacidad = datos[0];
-
-    estructura += `<td>${mayor.name} ${mayor.percent.toFixed(2)}%</td>`;
-    estructura += `<td>${menor.name} ${menor.percent}%</td>`;
-    estructura += `<td>${capacidad.name} ${capacidad.capacity}</td>`;
-
-    elementoHTML.innerHTML += estructura;
-}
-
 function EventsStatics(datos){
     let pastEvents = pastEventsFilter(datos);
     imprimirEventsStatics(datos.events, pastEvents, $eventsStatics);
+}
+
+function imprimirEventsStatics(datos, pastEvents, elementoHTML){
+    let estructura = "";
+    // agarramos el de mas asistencia y el de menos
+    let mayor = pastEvents.at(-1);
+    let menor = pastEvents.at(0);
+    // Ordenamos segun la capacidad 
+    datos.sort((a, b) => b.capacity - a.capacity)
+    // Asignamos el de mayor capacidad
+    let eventoCapacidadMayor = datos.at(0);
+    let formato = new Intl.NumberFormat("en-US");
+    let valor = eventoCapacidadMayor.capacity
+    let capacidadMayor = formato.format(valor);
+    // asignamos y agregamos a estructura
+    estructura += `<td>${mayor.name} ${mayor.percent.toFixed(2)}%</td>`;
+    estructura += `<td>${menor.name} ${menor.percent}%</td>`;
+    estructura += `<td>${eventoCapacidadMayor.name} ${capacidadMayor}</td>`;
+
+    elementoHTML.innerHTML += estructura;
 }
